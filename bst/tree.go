@@ -30,7 +30,9 @@ func NewTree() *Tree {
 }
 
 func (t *Tree) Find(value string) []string {
-	node := t.findNode(value, t.root)
+	if node := t.findNode(value, t.root); node != nil {
+		return node.tokens
+	}
 	return nil
 }
 
@@ -69,4 +71,27 @@ func (t *Tree) insertOn(p Pair, n *Node) {
 			t.insertOn(p, n.right)
 		}
 	}
+}
+
+func (t *Tree) InOrderTokens() <-chan string {
+	c := make(chan string)
+	sendTokens := func(n *Node) {
+		for _, token := range n.tokens {
+			c <- token
+		}
+	}
+	var sendSubtree func(n *Node)
+	sendSubtree = func(n *Node) {
+		if n == nil {
+			return
+		}
+		sendSubtree(n.left)
+		sendTokens(n)
+		sendSubtree(n.right)
+	}
+	go func() {
+		sendSubtree(t.root)
+		close(c)
+	}()
+	return c
 }
