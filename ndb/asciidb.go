@@ -29,11 +29,13 @@ type ASCIIDB struct {
 	basePath   string
 	FoodGroups []FoodGroup
 	Nutrients  []Nutrient
+	Foods      map[string]Food
 }
 
 func ReadDatabase(base string) (*ASCIIDB, error) {
 	db := &ASCIIDB{
 		basePath: base,
+		Foods:    make(map[string]Food, 8000),
 	}
 
 	log.Print("Loading food groups")
@@ -89,7 +91,6 @@ func (db *ASCIIDB) readNutrientDefinitions() error {
 
 		id, err := intyString(parts[0])
 		if err != nil {
-			println(line)
 			return fmt.Errorf("readNutrientDefinitions: %v", err)
 		}
 
@@ -105,6 +106,34 @@ func (db *ASCIIDB) readNutrientDefinitions() error {
 
 func (db *ASCIIDB) readFoods() error {
 	return ReadFile(path.Join(db.basePath, "FOOD_DES.txt"), func(line string) error {
+		parts := strings.Split(line, "^")
+		if len(parts) != 14 {
+			return fmt.Errorf("Expected 14 parts, got %d from a FOOD_DES", len(parts))
+		}
+
+		foodGroup, err := intyString(parts[1])
+		if err != nil {
+			return fmt.Errorf("readFoods: FoodGroup: %v", err)
+		}
+
+		refuse, err := intyString(parts[8])
+		if err != nil {
+			return fmt.Errorf("readFoods: Refuse: %v", err)
+		}
+
+		id := trimString(parts[0])
+
+		db.Foods[id] = Food{
+			NDBID:             id,
+			FoodGroup:         foodGroup,
+			LongDescription:   trimString(parts[2]),
+			ShortDescription:  trimString(parts[3]),
+			CommonNames:       trimString(parts[4]),
+			Manufacturer:      trimString(parts[5]),
+			RefuseDescription: trimString(parts[7]),
+			Refuse:            refuse,
+		}
+
 		return nil
 	})
 }
