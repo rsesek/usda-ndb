@@ -97,7 +97,7 @@ func (bf *bigFile) readFile(file string) {
 		}
 
 		// If we moved at all, seek the file backwards.
-		if delta := n - nOrig; delta > 0 {
+		if delta := n - nOrig; delta < 0 {
 			_, err := f.Seek(int64(delta), 1)
 			if err != nil {
 				bf.done <- err
