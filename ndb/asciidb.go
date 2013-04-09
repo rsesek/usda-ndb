@@ -56,6 +56,8 @@ func ReadDatabase(base string) (*ASCIIDB, error) {
 		return nil, err
 	}
 
+	log.Print("Database loaded")
+
 	fmt.Printf("%#v", *db)
 	return db, nil
 }

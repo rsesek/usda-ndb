@@ -18,8 +18,10 @@
 package ndb
 
 import (
+	"fmt"
 	"io"
 	"os"
+	"strings"
 )
 
 // The number of bytes of a file to read, aligned to the nearest newline.
@@ -29,8 +31,8 @@ type LineProcessor func(line string) error
 
 type bigFile struct {
 	processor LineProcessor // The function that accepts lines.
-	done      chan error    // Channel that workers spawned from readFile use to communicate.
-	workers   int           // Number of workers spawned from readFile.
+	started   chan bool     // Used to send messages from processChunk whenever a worker starts.
+	done      chan error    // Used to send messages from processChunk or readFile when an error occurs, or nil at EOF.
 }
 
 // ReadFile reads the file at path |file| and processes lines using the |processor|
@@ -39,31 +41,42 @@ type bigFile struct {
 func ReadFile(file string, processor LineProcessor) error {
 	bf := &bigFile{
 		processor: processor,
+		started:   make(chan bool),
 		done:      make(chan error),
 	}
 
-	err := bf.readFile(file)
-	if err != nil {
-		return err
-	}
+	go bf.readFile(file)
 
 	// Wait for the workers to complete.
-	for i := bf.workers; i > 0; i-- {
-		err := <-bf.done
-		if err != nil {
-			return err
+	// Count readFile as the first worker.
+	var errs []string
+	for i := 1; i > 0; {
+		select {
+		case <-bf.started:
+			i++
+		case err := <-bf.done:
+			i--
+			if err != nil {
+				errs = append(errs, err.Error())
+			}
 		}
+	}
+
+	if len(errs) > 0 {
+		errStr := strings.Join(errs, "\n\t")
+		return fmt.Errorf("ReadFile(%s) encountered the following errors:\n\t%s", file, errStr)
 	}
 
 	return nil
 }
 
-// readFile synchronously (from ReadFile) opens and reads the file into chunks. Each
-// chunk is then passed to a goroutine, which processes each line of the chunk individually.
-func (bf *bigFile) readFile(file string) error {
+// readFile synchronously opens and reads the file into chunks. Each chunk is then passed
+// to a goroutine, which processes each line of the chunk individually.
+func (bf *bigFile) readFile(file string) {
 	f, err := os.Open(file)
 	if err != nil {
-		return err
+		bf.done <- err
+		return
 	}
 	defer f.Close()
 
@@ -72,9 +85,10 @@ func (bf *bigFile) readFile(file string) error {
 		n, err := f.Read(buf)
 		if err != nil {
 			if err == io.EOF {
-				return nil
+				err = nil
 			}
-			return err
+			bf.done <- err
+			return
 		}
 
 		// Walk the buffer back to the previous newline.
@@ -86,22 +100,26 @@ func (bf *bigFile) readFile(file string) error {
 		if delta := n - nOrig; delta > 0 {
 			_, err := f.Seek(int64(delta), 1)
 			if err != nil {
-				return err
+				bf.done <- err
+				return
 			}
 		}
 
 		// Proceess the chunk.
-		bf.workers++
 		go bf.processChunk(string(buf[:n]))
 	}
 
-	return nil
+	bf.done <- nil
+
+	return
 }
 
 // processChunk splits a chunk on \r\n and sends each whitespace-trimmed line to
 // the processor. Any errors from the processor are sent over the error channel,
 // or nil is sent when processing is done.
 func (bf *bigFile) processChunk(chunk string) {
+	bf.started <- true
+
 	var start int
 	for i := 0; i < len(chunk); i++ {
 		if chunk[i] == '\r' {
