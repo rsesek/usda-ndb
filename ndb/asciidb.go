@@ -116,9 +116,12 @@ func (db *ASCIIDB) readFoods() error {
 			return fmt.Errorf("readFoods: FoodGroup: %v", err)
 		}
 
-		refuse, err := intyString(parts[8])
-		if err != nil {
-			return fmt.Errorf("readFoods: Refuse: %v", err)
+		var refuse int
+		if s := trimString(parts[8]); s != "" {
+			refuse, err = intyString(s)
+			if err != nil {
+				return fmt.Errorf("readFoods: Refuse: %v", err)
+			}
 		}
 
 		id := trimString(parts[0])
@@ -140,6 +143,10 @@ func (db *ASCIIDB) readFoods() error {
 
 func (db *ASCIIDB) readFoodNutrients() error {
 	return ReadFile(path.Join(db.basePath, "NUT_DATA.txt"), func(line string) error {
+		parts := strings.Split(line, "^")
+		if len(parts) != 18 {
+			return fmt.Errorf("Expected 18 parts, got %d from a NUT_DATA", len(parts))
+		}
 		return nil
 	})
 }
