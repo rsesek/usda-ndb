@@ -56,12 +56,12 @@ type Food struct {
 	RefuseDescription string
 	// The percentage of the food that is refuse.
 	Refuse int
+	// Nutrients of the food.
+	Nutrients []FoodNutrient
 }
 
 // A FoodNutrieint is a measured nutrient value for a food item.
 type FoodNutrient struct {
-	// 5-digit identification number for the food in which this nutrient was measured. Key.
-	NDBID string
 	// 3-digit code that identifiers the nutrient. Key.
 	NutrientID int
 	// Edible portion (amount in 100 grams).

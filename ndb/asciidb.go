@@ -61,7 +61,6 @@ func ReadDatabase(base string) (*ASCIIDB, error) {
 	log.Print("Database loaded")
 	log.Printf("... %d foods", len(db.Foods))
 
-	fmt.Printf("%#v", *db)
 	return db, nil
 }
 
@@ -148,6 +147,34 @@ func (db *ASCIIDB) readFoodNutrients() error {
 		if len(parts) != 18 {
 			return fmt.Errorf("Expected 18 parts, got %d from a NUT_DATA", len(parts))
 		}
+
+		id := trimString(parts[0])
+
+		food, ok := db.Foods[id]
+		if !ok {
+			return fmt.Errorf("readFoodNutrients: Could not find food %s", id)
+		}
+
+		nutrientID, err := intyString(parts[1])
+		if err != nil {
+			return fmt.Errorf("readFoodNutrients: NutrientID: %v", err)
+		}
+
+		value, err := strconv.ParseFloat(trimString(parts[2]), 32)
+		if err != nil {
+			return fmt.Errorf("readFoodNutrients: Value: %v", err)
+		}
+
+		dataPoints, err := intyString(parts[3])
+		if err != nil {
+			return fmt.Errorf("readFoodNutrients: NutrientID: %v", err)
+		}
+
+		food.Nutrients = append(food.Nutrients, FoodNutrient{
+			NutrientID: nutrientID,
+			Value:      float32(value),
+			DataPoints: dataPoints,
+		})
 		return nil
 	})
 }
