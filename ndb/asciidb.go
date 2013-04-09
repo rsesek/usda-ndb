@@ -23,6 +23,8 @@ import (
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/rsesek/usda-ndb/bst"
 )
 
 type ASCIIDB struct {
@@ -30,12 +32,14 @@ type ASCIIDB struct {
 	FoodGroups []FoodGroup
 	Nutrients  []Nutrient
 	Foods      map[string]*Food
+	searchTree *bst.Tree
 }
 
 func ReadDatabase(base string) (*ASCIIDB, error) {
 	db := &ASCIIDB{
-		basePath: base,
-		Foods:    make(map[string]*Food, 8000),
+		basePath:   base,
+		Foods:      make(map[string]*Food, 8000),
+		searchTree: bst.NewTree(),
 	}
 
 	log.Print("Loading food groups")
@@ -126,7 +130,7 @@ func (db *ASCIIDB) readFoods() error {
 
 		id := trimString(parts[0])
 
-		db.Foods[id] = &Food{
+		food := &Food{
 			NDBID:             id,
 			FoodGroup:         foodGroup,
 			LongDescription:   trimString(parts[2]),
@@ -135,6 +139,22 @@ func (db *ASCIIDB) readFoods() error {
 			Manufacturer:      trimString(parts[5]),
 			RefuseDescription: trimString(parts[7]),
 			Refuse:            refuse,
+		}
+		db.Foods[id] = food
+
+		// Join all the descriptions together to create search terms.
+		search := strings.ToLower(fmt.Sprintf("%s %s %s %s %s",
+			food.LongDescription, food.ShortDescription, food.CommonNames, food.Manufacturer))
+		var last int
+		for i := 0; i < len(search); i++ {
+			c := search[i]
+			if c == ',' || c == ' ' || c == '&' || c == '/' || c == '!' || c == '-' || c == '.' {
+				part := search[last:i]
+				if len(part) > 2 {
+					db.searchTree.Insert(bst.Pair{part, id})
+				}
+				last = i + 1
+			}
 		}
 
 		return nil
