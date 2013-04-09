@@ -23,7 +23,7 @@ type Nutrient struct {
 	// 3-digit code that identifiers the nutrient. Key.
 	NutrientID int
 	// The units of measure.
-	Units int
+	Units string
 	// Description.
 	Description string
 }
