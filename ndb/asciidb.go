@@ -29,13 +29,13 @@ type ASCIIDB struct {
 	basePath   string
 	FoodGroups []FoodGroup
 	Nutrients  []Nutrient
-	Foods      map[string]Food
+	Foods      map[string]*Food
 }
 
 func ReadDatabase(base string) (*ASCIIDB, error) {
 	db := &ASCIIDB{
 		basePath: base,
-		Foods:    make(map[string]Food, 8000),
+		Foods:    make(map[string]*Food, 8000),
 	}
 
 	log.Print("Loading food groups")
@@ -59,6 +59,7 @@ func ReadDatabase(base string) (*ASCIIDB, error) {
 	}
 
 	log.Print("Database loaded")
+	log.Printf("... %d foods", len(db.Foods))
 
 	fmt.Printf("%#v", *db)
 	return db, nil
@@ -126,7 +127,7 @@ func (db *ASCIIDB) readFoods() error {
 
 		id := trimString(parts[0])
 
-		db.Foods[id] = Food{
+		db.Foods[id] = &Food{
 			NDBID:             id,
 			FoodGroup:         foodGroup,
 			LongDescription:   trimString(parts[2]),
