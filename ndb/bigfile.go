@@ -25,7 +25,7 @@ import (
 )
 
 // The number of bytes of a file to read, aligned to the nearest newline.
-const kAlignment = 4096
+const kChunkSize = 524288
 
 type LineProcessor func(line string) error
 
@@ -80,7 +80,7 @@ func (bf *bigFile) readFile(file string) {
 	}
 	defer f.Close()
 
-	buf := make([]byte, kAlignment)
+	buf := make([]byte, kChunkSize)
 	for {
 		n, err := f.Read(buf)
 		if err != nil {
