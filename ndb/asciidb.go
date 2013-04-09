@@ -46,6 +46,16 @@ func ReadDatabase(base string) (*ASCIIDB, error) {
 		return nil, err
 	}
 
+	log.Print("Loading food database")
+	if err := db.readFoods(); err != nil {
+		return nil, err
+	}
+
+	log.Print("Loading food nutrients information")
+	if err := db.readFoodNutrients(); err != nil {
+		return nil, err
+	}
+
 	fmt.Printf("%#v", *db)
 	return db, nil
 }
@@ -87,6 +97,18 @@ func (db *ASCIIDB) readNutrientDefinitions() error {
 			Description: trimString(parts[3]),
 		})
 
+		return nil
+	})
+}
+
+func (db *ASCIIDB) readFoods() error {
+	return ReadFile(path.Join(db.basePath, "FOOD_DES.txt"), func(line string) error {
+		return nil
+	})
+}
+
+func (db *ASCIIDB) readFoodNutrients() error {
+	return ReadFile(path.Join(db.basePath, "NUT_DATA.txt"), func(line string) error {
 		return nil
 	})
 }
