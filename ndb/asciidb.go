@@ -73,6 +73,12 @@ func ReadDatabase(base string) (*ASCIIDB, error) {
 	return db, nil
 }
 
+// FindFood performs a text search for Foods named |name| and returns a slice of
+// NDBIDs for matches, or nil on none.
+func (db *ASCIIDB) FindFood(name string) []string {
+	return db.searchTree.Find(name)
+}
+
 func (db *ASCIIDB) readFoodGroups() error {
 	return ReadFile(path.Join(db.basePath, "FD_GROUP.txt"), func(line string) error {
 		parts := strings.Split(line, "^")
