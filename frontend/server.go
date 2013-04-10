@@ -18,10 +18,12 @@
 package frontend
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
 	"github.com/rsesek/usda-ndb/ndb"
 )
@@ -51,6 +53,9 @@ type server struct {
 func (s *server) init() {
 	s.mux.Handle("/", http.FileServer(http.Dir(s.staticDir)))
 	s.handleMethod("/_/search", (*server).search)
+	s.handleMethod("/_/foodGroups", (*server).foodGroups)
+	s.handleMethod("/_/nutrients", (*server).nutrients)
+	s.handleMethod("/_/food/", (*server).getFood)
 }
 
 // Convience method to work around https://code.google.com/p/go/issues/detail?id=2280.
@@ -71,4 +76,31 @@ func (s *server) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 func (s *server) search(rw http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(rw, "Hello DB %#v", *s.db)
+}
+
+func (s *server) foodGroups(rw http.ResponseWriter, req *http.Request) {
+	jsonResponse(rw, s.db.FoodGroups)
+}
+
+func (s *server) nutrients(rw http.ResponseWriter, req *http.Request) {
+	jsonResponse(rw, s.db.Nutrients)
+}
+
+func (s *server) getFood(rw http.ResponseWriter, req *http.Request) {
+	parts := strings.Split(req.URL.Path, "/")
+	id := parts[len(parts)-1]
+	if food, ok := s.db.Foods[id]; ok {
+		jsonResponse(rw, food)
+	} else {
+		rw.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(rw, "Error: Could not find food with id %s", id)
+	}
+}
+
+func jsonResponse(rw http.ResponseWriter, resp interface{}) {
+	rw.Header().Set("Content-Type", "application/json")
+	enc := json.NewEncoder(rw)
+	if err := enc.Encode(resp); err != nil {
+		panic(err.Error())
+	}
 }
