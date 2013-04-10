@@ -58,6 +58,8 @@ type Food struct {
 	Refuse int
 	// Nutrients of the food.
 	Nutrients []FoodNutrient
+	// The common household weights/units.
+	Weights []Weight
 }
 
 // A FoodNutrieint is a measured nutrient value for a food item.
@@ -68,4 +70,22 @@ type FoodNutrient struct {
 	Value float32
 	// Number of data points used to calculate the value.
 	DataPoints int
+}
+
+// A Weight is a common measure of a food item that contains a factor for
+// multiplying a FoodNutrient.Value to get the Value in common units.
+//
+// The formula is N = (V*W) / 100
+//   N = nutrient value for household measure.
+//   V = nutrient value per 100g.
+//   W = g weight of portion.
+type Weight struct {
+	// Sequence number.
+	Sequence int
+	// Amount of units (e.g. 1 in 1 cup).
+	Amount float32
+	// The description of the weight.
+	Description string
+	// The weight in grams for this unit.
+	WeightG float32
 }

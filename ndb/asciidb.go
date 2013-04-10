@@ -62,6 +62,11 @@ func ReadDatabase(base string) (*ASCIIDB, error) {
 		return nil, err
 	}
 
+	log.Print("Loading weight information")
+	if err := db.readWeights(); err != nil {
+		return nil, err
+	}
+
 	log.Print("Database loaded")
 	log.Printf("... %d foods", len(db.Foods))
 
@@ -194,6 +199,44 @@ func (db *ASCIIDB) readFoodNutrients() error {
 			NutrientID: nutrientID,
 			Value:      float32(value),
 			DataPoints: dataPoints,
+		})
+		return nil
+	})
+}
+
+func (db *ASCIIDB) readWeights() error {
+	return ReadFile(path.Join(db.basePath, "WEIGHT.txt"), func(line string) error {
+		parts := strings.Split(line, "^")
+		if len(parts) != 7 {
+			return fmt.Errorf("Expected 7 parts, got %d from a WEIGHT", len(parts))
+		}
+
+		id := trimString(parts[0])
+		food, ok := db.Foods[id]
+		if !ok {
+			return fmt.Errorf("readWeights: Could not find food %s", id)
+		}
+
+		sequence, err := intyString(parts[1])
+		if err != nil {
+			return fmt.Errorf("readWeights: Sequence: %v", err)
+		}
+
+		amount, err := strconv.ParseFloat(trimString(parts[2]), 32)
+		if err != nil {
+			return fmt.Errorf("readWeights: Amount: %v", err)
+		}
+
+		weight, err := strconv.ParseFloat(trimString(parts[4]), 32)
+		if err != nil {
+			return fmt.Errorf("readWeights: WeightG: %v", err)
+		}
+
+		food.Weights = append(food.Weights, Weight{
+			Sequence: sequence,
+			Amount: float32(amount),
+			Description: trimString(parts[3]),
+			WeightG: float32(weight),
 		})
 		return nil
 	})
