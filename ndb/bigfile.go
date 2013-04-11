@@ -80,8 +80,8 @@ func (bf *bigFile) readFile(file string) {
 	}
 	defer f.Close()
 
-	buf := make([]byte, kChunkSize)
 	for {
+		buf := make([]byte, kChunkSize)
 		n, err := f.Read(buf)
 		if err != nil {
 			if err == io.EOF {
@@ -106,7 +106,7 @@ func (bf *bigFile) readFile(file string) {
 		}
 
 		// Proceess the chunk.
-		go bf.processChunk(string(buf[:n]))
+		go bf.processChunk(buf[:n])
 	}
 
 	bf.done <- nil
@@ -117,13 +117,19 @@ func (bf *bigFile) readFile(file string) {
 // processChunk splits a chunk on \r\n and sends each whitespace-trimmed line to
 // the processor. Any errors from the processor are sent over the error channel,
 // or nil is sent when processing is done.
-func (bf *bigFile) processChunk(chunk string) {
+func (bf *bigFile) processChunk(buf []byte) {
 	bf.started <- true
 
+	// Convert the bytes to runes, which is necessary to ensure that any ASCII
+	// characters are decoded correctly to UTF8.
+	chunk := make([]rune, len(buf))
+
 	var start int
-	for i := 0; i < len(chunk); i++ {
+	for i := 0; i < len(buf); i++ {
+		chunk[i] = rune(buf[i])
+
 		if chunk[i] == '\r' {
-			if err := bf.processor(chunk[start:i]); err != nil {
+			if err := bf.processor(string(chunk[start:i])); err != nil {
 				bf.done <- err
 				return
 			}
