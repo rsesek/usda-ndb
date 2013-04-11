@@ -1,0 +1,25 @@
+body {
+  margin: auto;
+  font-family: Arial;
+  font-size: 12pt;
+}
+
+header {
+  font-size: 14pt;
+  text-align: center;
+  margin-top: 150pt;
+}
+
+#search-field {
+  width: 300pt;
+}
+
+#search-button {
+  font-weight: bold;
+  color: white;
+  background-color: rgb(153, 0, 4);
+  border-width: 1pt;
+  border-style: solid;
+  border-color: rgb(185, 0, 5);
+  border-radius: 2pt;
+}
