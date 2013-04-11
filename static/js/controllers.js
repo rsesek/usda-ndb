@@ -15,8 +15,14 @@
 // limitations under the License.
 //
 
-function SearchController($scope) {
+/**
+ * Controller for the search box and list of results.
+ */
+function SearchController($scope, $http) {
+  /** The user's query string. */
+  $scope.query = '';
+
   $scope.search = function() {
-    console.log('search');
+    console.log('You searched for "' + $scope.query + '"');
   };
 }

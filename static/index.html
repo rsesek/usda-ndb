@@ -12,7 +12,7 @@
     <header>
       <h1>Foodle</h1>
       <form ng-submit="search()">
-        <input type="search" id="search-field" name="q"/>
+        <input type="search" id="search-field" ng-model="query"/>
         <button type="submit" id="search-button">Search</button>
       </form>
     </header>
