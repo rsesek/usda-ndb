@@ -16,5 +16,9 @@
         <button type="submit" id="search-button">Search</button>
       </form>
     </header>
+
+    <ul>
+      <li ng-repeat="result in results">{{result.Description}}</li>
+    </ul>
   </body>
 </html>

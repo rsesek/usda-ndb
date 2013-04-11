@@ -22,7 +22,18 @@ function SearchController($scope, $http) {
   /** The user's query string. */
   $scope.query = '';
 
+  /** Array of all results for the query. */
+  $scope.results = [];
+
+  /**
+   * Action in response to submitting a search query.
+   *
+   * Sends a request to the backend and stores the results in results.
+   */
   $scope.search = function() {
-    console.log('You searched for "' + $scope.query + '"');
+    $http.get('/_/search', {params: {q: $scope.query}})
+        .success(function(data) {
+          $scope.results = data;
+        });
   };
 }
