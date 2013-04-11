@@ -239,10 +239,10 @@ func (db *ASCIIDB) readWeights() error {
 		}
 
 		food.Weights = append(food.Weights, Weight{
-			Sequence: sequence,
-			Amount: float32(amount),
+			Sequence:    sequence,
+			Amount:      float32(amount),
 			Description: trimString(parts[3]),
-			WeightG: float32(weight),
+			WeightG:     float32(weight),
 		})
 		return nil
 	})
