@@ -154,7 +154,7 @@ func (db *ASCIIDB) readFoods() error {
 		db.Foods[id] = food
 
 		// Join all the descriptions together to create search terms.
-		search := strings.ToLower(fmt.Sprintf("%s %s %s %s %s",
+		search := strings.ToLower(fmt.Sprintf("%s %s %s %s",
 			food.LongDescription, food.ShortDescription, food.CommonNames, food.Manufacturer))
 		var last int
 		for i := 0; i < len(search); i++ {

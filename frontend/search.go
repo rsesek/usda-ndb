@@ -47,7 +47,7 @@ func (l resultList) Swap(i, j int) {
 
 func (s *server) search(rw http.ResponseWriter, req *http.Request) {
 	q := req.FormValue("q")
-	terms := strings.Split(q, " ")
+	terms := strings.Split(strings.ToLower(q), " ")
 
 	// For each search term, start a new goroutine to search the BST. It is
 	// threadsafe for reads/access.
