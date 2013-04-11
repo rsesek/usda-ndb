@@ -36,4 +36,15 @@ function SearchController($scope, $http) {
           $scope.results = data;
         });
   };
+
+  /**
+   * Filters the result list to just 10 items or fewer.
+   */
+  $scope.filteredResults = function() {
+    var results = [];
+    for (var i = 0; i < 10 && i < $scope.results.length; ++i) {
+      results.push($scope.results[i]);
+    }
+    return results;
+  };
 }
