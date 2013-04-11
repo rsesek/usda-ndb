@@ -74,39 +74,6 @@ func (s *server) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	s.mux.ServeHTTP(rw, req)
 }
 
-func (s *server) search(rw http.ResponseWriter, req *http.Request) {
-	q := req.FormValue("q")
-	terms := strings.Split(q, " ")
-
-	// For each search term, start a new goroutine to search the BST. It is
-	// threadsafe for reads/access.
-	queries := make(chan []string)
-	for _, term := range terms {
-		go func() {
-			queries <- s.db.FindFood(term)
-		}()
-	}
-
-	// A realllllly stupid scoring algorithm just counts the number of times
-	// the NDBID comes up.
-	scores := make(map[string]int)
-	for i := 0; i < len(terms); i++ {
-		for _, id := range <-queries {
-			scores[id]++
-		}
-	}
-
-	// Collect the results into a response list.
-	// TODO(rsesek): Trim out nutrient data? Paginate?
-	foods := make([]*ndb.Food, len(scores))
-	i := 0
-	for id, _ := range scores {
-		foods[i] = s.db.Foods[id]
-		i++
-	}
-	jsonResponse(rw, scores)
-}
-
 func (s *server) foodGroups(rw http.ResponseWriter, req *http.Request) {
 	jsonResponse(rw, s.db.FoodGroups)
 }
