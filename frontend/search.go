@@ -53,9 +53,9 @@ func (s *server) search(rw http.ResponseWriter, req *http.Request) {
 	// threadsafe for reads/access.
 	queries := make(chan []string)
 	for _, term := range terms {
-		go func() {
+		go func(term string) {
 			queries <- s.db.FindFood(term)
-		}()
+		}(term)
 	}
 
 	// A realllllly stupid scoring algorithm just counts the number of times
