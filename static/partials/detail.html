@@ -1,3 +1,11 @@
 <div ng-controller="DetailController">
-  <h2>{{food.LongDescription}}</h2>
+  <div ng-show="error" class="error">
+    <h2>Food Not Found!</h2>
+    <p>Something unexpected happened:</p>
+    <p>{{error}}</p>
+  </div>
+
+  <div ng-hide="error">
+    <h2>{{food.LongDescription}}</h2>
+  </div>
 </div>

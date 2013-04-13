@@ -23,3 +23,7 @@ header {
   border-color: rgb(185, 0, 5);
   border-radius: 2pt;
 }
+
+.error h2 {
+  color: red;
+}

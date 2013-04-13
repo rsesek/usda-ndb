@@ -66,5 +66,8 @@ function DetailController($scope, $routeParams, $http) {
   $http.get('/_/food/' + $routeParams.NDBID)
       .success(function(data) {
         $scope.food = data;
+      })
+      .error(function(data) {
+        $scope.error = data;
       });
 }
