@@ -14,6 +14,11 @@
 
     <div id="refuse" ng-show="food.Refuse">{{food.Refuse}}% of this food is refuse. {{food.RefuseDescription}}.</div>
 
+    <div id="units">
+      <select ng-model="unit" ng-options="u as u.Description for u in food.Weights"></select>
+      ({{unit.WeightG}} grams)
+    </div>
+
     <table id="nutrients">
       <thead>
         <th>Nutrient</th>
