@@ -13,5 +13,12 @@
     <div id="manufacturer">{{food.Manufacturer}}</div>
 
     <div id="refuse" ng-show="food.Refuse">{{food.Refuse}}% of this food is refuse. {{food.RefuseDescription}}.</div>
+
+    <div id="nutrients">
+      <div class="row" ng-repeat="nutrient in food.Nutrients">
+        <div class="span8">{{nutrient.NutrientID}}</div>
+        <div class="span4">{{nutrient.Value}}</div>
+      </div>
+    </div>
   </div>
 </div>
