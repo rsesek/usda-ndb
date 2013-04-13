@@ -41,4 +41,25 @@ angular.module('foodle', [])
       return function(input) {
         return FoodGroups.nameFromId(input);
       };
+    })
+    .service('NutrientDefinitions', function($http) {
+      var service = {
+        _data: {},
+        nameFromId: function(id) {
+          if (id in this._data)
+            return this._data[id].Description;
+          return 'Unknown';
+        }
+      };
+      $http.get('/_/nutrients').success(function(data) {
+        for (var i = 0; i < data.length; ++i) {
+          service._data[data[i].NutrientID] = data[i];
+        }
+      });
+      return service;
+    })
+    .filter('nutrientName', function(NutrientDefinitions) {
+      return function(input) {
+        return NutrientDefinitions.nameFromId(input);
+      };
     });
