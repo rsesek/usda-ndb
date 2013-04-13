@@ -1,5 +1,7 @@
 <div ng-controller="SearchController">
   <ul>
-    <li ng-repeat="result in filteredResults()">{{result.Description}}</li>
+    <li ng-repeat="result in filteredResults()">
+      <a href="#/food/{{result.NDBID}}">{{result.Description}}</a>
+    </li>
   </ul>
 </div>

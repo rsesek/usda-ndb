@@ -55,3 +55,16 @@ function SearchController($scope, $http) {
     return results;
   };
 }
+
+/**
+ * Controller for the food detail page.
+ */
+function DetailController($scope, $routeParams, $http) {
+  /** The food object. */
+  $scope.food = {};
+
+  $http.get('/_/food/' + $routeParams.NDBID)
+      .success(function(data) {
+        $scope.food = data;
+      });
+}

@@ -18,5 +18,6 @@
 angular.module('foodle', [])
     .config(function($routeProvider) {
       $routeProvider
-          .when('/search', {templateUrl: '/partials/search.html'});
+          .when('/search', {templateUrl: '/partials/search.html'})
+          .when('/food/:NDBID', {templateUrl: '/partials/detail.html'});
     });
