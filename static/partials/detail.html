@@ -7,6 +7,7 @@
 
   <div id="food-detals" ng-hide="error">
     <h2 id="long-description">{{food.LongDescription}}</h2>
+    <div id="food-group">{{food.FoodGroup | foodGroupName}}</div>
 
     <div id="common-names">{{food.CommonNames}}</div>
     <div id="manufacturer">{{food.Manufacturer}}</div>

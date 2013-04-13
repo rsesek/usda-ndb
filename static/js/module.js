@@ -20,4 +20,9 @@ angular.module('foodle', [])
       $routeProvider
           .when('/search', {templateUrl: '/partials/search.html'})
           .when('/food/:NDBID', {templateUrl: '/partials/detail.html'});
+    })
+    .filter('foodGroupName', function() {
+      return function(input) {
+        return 'Food Group is #' + input;
+      };
     });
