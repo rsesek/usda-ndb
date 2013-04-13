@@ -49,6 +49,11 @@ angular.module('foodle', [])
           if (id in this._data)
             return this._data[id].Description;
           return 'Unknown';
+        },
+        unitsForId: function(id) {
+          if (id in this._data)
+            return this._data[id].Units;
+          return '';
         }
       };
       $http.get('/_/nutrients').success(function(data) {
@@ -61,5 +66,10 @@ angular.module('foodle', [])
     .filter('nutrientName', function(NutrientDefinitions) {
       return function(input) {
         return NutrientDefinitions.nameFromId(input);
+      };
+    })
+    .filter('nutrientUnits', function(NutrientDefinitions) {
+      return function(input) {
+        return NutrientDefinitions.unitsForId(input);
       };
     });

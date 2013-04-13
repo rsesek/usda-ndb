@@ -17,7 +17,7 @@
     <div id="nutrients">
       <div class="row" ng-repeat="nutrient in food.Nutrients">
         <div class="span8">{{nutrient.NutrientID | nutrientName}}</div>
-        <div class="span4">{{nutrient.Value}}</div>
+        <div class="span4">{{nutrient.Value}} {{nutrient.NutrientID | nutrientUnits}}</div>
       </div>
     </div>
   </div>
