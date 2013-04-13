@@ -21,17 +21,24 @@ angular.module('foodle', [])
           .when('/search', {templateUrl: '/partials/search.html'})
           .when('/food/:NDBID', {templateUrl: '/partials/detail.html'});
     })
-    .service('FoodGroups', function() {
+    .service('FoodGroups', function($http) {
       var service = {
         _data: {},
         nameFromId: function(id) {
-          return '#' + id + ' (name TBD)';
+          if (id in this._data)
+            return this._data[id].Description;
+          return 'Unknown';
         }
       };
+      $http.get('/_/foodGroups').success(function(data) {
+        for (var i = 0; i < data.length; ++i) {
+          service._data[data[i].GroupCode] = data[i];
+        }
+      });
       return service;
     })
     .filter('foodGroupName', function(FoodGroups) {
       return function(input) {
-        return 'Food Group is ' + FoodGroups.nameFromId(input);
+        return FoodGroups.nameFromId(input);
       };
     });
