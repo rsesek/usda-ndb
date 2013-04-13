@@ -16,26 +16,33 @@
 //
 
 /**
+ * Controller for the home page.
+ */
+function HomeController($scope, $location) {
+  /** The user's query string. */
+  $scope.query = $location.search().q;
+
+  /**
+   * Action for the search button that redirects to the search result list.
+   */
+  $scope.search = function() {
+    $location.search('q', $scope.query);
+    $location.path('/search');
+  };
+}
+
+/**
  * Controller for the search box and list of results.
  */
 function SearchController($scope, $http) {
-  /** The user's query string. */
-  $scope.query = '';
-
   /** Array of all results for the query. */
   $scope.results = [];
 
-  /**
-   * Action in response to submitting a search query.
-   *
-   * Sends a request to the backend and stores the results in results.
-   */
-  $scope.search = function() {
-    $http.get('/_/search', {params: {q: $scope.query}})
-        .success(function(data) {
-          $scope.results = data;
-        });
-  };
+  // $scope.query gets inherited from the parent scope.
+  $http.get('/_/search', {params: {q: $scope.query}})
+      .success(function(data) {
+        $scope.results = data;
+      });
 
   /**
    * Filters the result list to just 10 items or fewer.

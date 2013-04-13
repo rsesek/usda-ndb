@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="foodle">
   <head>
     <meta charset="utf-8"/>
     <title>Foodle - USDA NDB Search Engine</title>
@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="/css/screen.css"/>
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
     <script type="text/javascript" src="/js/controllers.js"></script>
+    <script type="text/javascript" src="/js/module.js"></script>
   </head>
-  <body class="container" ng-controller="SearchController">
+  <body class="container" ng-controller="HomeController">
     <header>
       <h1>Foodle</h1>
       <form ng-submit="search()">
@@ -17,8 +18,6 @@
       </form>
     </header>
 
-    <ul>
-      <li ng-repeat="result in filteredResults()">{{result.Description}}</li>
-    </ul>
+    <div ng-view></div>
   </body>
 </html>
