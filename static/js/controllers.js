@@ -92,4 +92,15 @@ function DetailController($scope, $routeParams, $http, NutrientDefinitions) {
   $scope.calcNutrientUnits = function(v) {
     return (v * $scope.unitAmount * $scope.unit.WeightG) / 100;
   };
+
+  /**
+   * Calculates the total number of grams for the current units.
+   */
+  $scope.calcTotalGrams = function(unitWeight) {
+    // At the time the partial loads, this function will be called and the
+    // backend HTTP request may not have yet finished. In that case, return 0.
+    if (!$scope.unit)
+      return 0;
+    return $scope.unit.WeightG * ($scope.unitAmount / $scope.unit.Amount);
+  };
 }

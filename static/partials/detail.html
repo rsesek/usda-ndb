@@ -16,8 +16,8 @@
 
     <div id="units">
       <input type="number" ng-model="unitAmount"/>
-      <select ng-model="unit" ng-options="u as u.Description for u in food.Weights" ng-change="onUnitsChanged()"></select>
-      ({{unit.WeightG}} grams)
+      <select ng-model="unit" ng-options="u as (u.Description + ' (' + u.WeightG + 'g)') for u in food.Weights" ng-change="onUnitsChanged()"></select>
+      <div>{{calcTotalGrams() | number:0}} grams total</div>
     </div>
 
     <table id="nutrients">
