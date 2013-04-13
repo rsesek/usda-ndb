@@ -27,3 +27,27 @@ header {
 .error h2 {
   color: red;
 }
+
+#nutrients {
+  border-width: 1pt;
+  border-style: solid;
+  border-color: black;
+  border-collapse: collapse;
+}
+
+#nutrients td {
+  padding: 3pt;
+}
+
+#nutrients .black {
+  background-color: black;
+  color: white;
+}
+
+#nutrients .nutrient {
+  width: 80%;
+}
+
+#nutrients .amount {
+  text-align: right;
+}

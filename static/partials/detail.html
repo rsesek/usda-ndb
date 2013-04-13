@@ -14,11 +14,15 @@
 
     <div id="refuse" ng-show="food.Refuse">{{food.Refuse}}% of this food is refuse. {{food.RefuseDescription}}.</div>
 
-    <div id="nutrients">
-      <div class="row" ng-repeat="nutrient in food.Nutrients">
-        <div class="span8">{{nutrient.NutrientID | nutrientName}}</div>
-        <div class="span4">{{nutrient.Value}} {{nutrient.NutrientID | nutrientUnits}}</div>
-      </div>
-    </div>
+    <table id="nutrients">
+      <thead>
+        <th>Nutrient</th>
+        <th>Amount</th>
+      </thead>
+      <tr ng-repeat="nutrient in food.Nutrients" ng-class-odd="'black'">
+        <td class="nutrient">{{nutrient.NutrientID | nutrientName}}</td>
+        <td class="amount">{{nutrient.Value}} {{nutrient.NutrientID | nutrientUnits}}</td>
+      </tr>
+    </table>
   </div>
 </div>
