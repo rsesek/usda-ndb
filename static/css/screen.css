@@ -33,6 +33,7 @@ header {
   border-style: solid;
   border-color: black;
   border-collapse: collapse;
+  width: 300pt;
 }
 
 #nutrients td {
@@ -45,7 +46,7 @@ header {
 }
 
 #nutrients .nutrient {
-  width: 80%;
+  width: 65%;
 }
 
 #nutrients .amount {
