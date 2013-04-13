@@ -2,6 +2,7 @@
   <ul>
     <li ng-repeat="result in filteredResults()">
       <a href="#/food/{{result.NDBID}}">{{result.Description}}</a>
+      <em>{{result.FoodGroup | foodGroupName}}</em>
     </li>
   </ul>
 </div>
