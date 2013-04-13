@@ -26,6 +26,8 @@ type Nutrient struct {
 	Units string
 	// Description.
 	Description string
+	// The order used in official reports.
+	SortOrder int
 }
 
 type FoodGroup struct {

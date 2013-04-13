@@ -109,10 +109,16 @@ func (db *ASCIIDB) readNutrientDefinitions() error {
 			return fmt.Errorf("readNutrientDefinitions: %v", err)
 		}
 
+		order, err := intyString(parts[5])
+		if err != nil {
+			return fmt.Errorf("readNutrientDefinitions: %v", err)
+		}
+
 		db.Nutrients = append(db.Nutrients, Nutrient{
 			NutrientID:  id,
 			Units:       trimString(parts[1]),
 			Description: trimString(parts[3]),
+			SortOrder:   order,
 		})
 
 		return nil
