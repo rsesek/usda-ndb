@@ -1,11 +1,16 @@
 <div ng-controller="DetailController">
-  <div ng-show="error" class="error">
+  <div class="error" ng-show="error">
     <h2>Food Not Found!</h2>
     <p>Something unexpected happened:</p>
     <p>{{error}}</p>
   </div>
 
-  <div ng-hide="error">
-    <h2>{{food.LongDescription}}</h2>
+  <div id="food-detals" ng-hide="error">
+    <h2 id="long-description">{{food.LongDescription}}</h2>
+
+    <div id="common-names">{{food.CommonNames}}</div>
+    <div id="manufacturer">{{food.Manufacturer}}</div>
+
+    <div id="refuse" ng-show="food.Refuse">{{food.Refuse}}% of this food is refuse. {{food.RefuseDescription}}.</div>
   </div>
 </div>
