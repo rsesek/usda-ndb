@@ -79,4 +79,16 @@ function DetailController($scope, $routeParams, $http) {
   $scope.onUnitsChanged = function() {
     $scope.unitAmount = $scope.unit.Amount;
   };
+
+  /**
+   * Calculates the amount of a nutrient given the current user-selected units.
+   * The $scope.food.Nutrients values are for per-edible 100g portion. To
+   * calculate the proper unit, the USA recommends this formula:
+   *    N = (V*W) / 100
+   *    V = Nutrient value per 100g.
+   *    W = Gram weight of the portion.
+   */
+  $scope.calcNutrientUnits = function(v) {
+    return (v * $scope.unitAmount * $scope.unit.WeightG) / 100;
+  };
 }

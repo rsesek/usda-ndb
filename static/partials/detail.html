@@ -27,7 +27,7 @@
       </thead>
       <tr ng-repeat="nutrient in food.Nutrients" ng-class-odd="'black'">
         <td class="nutrient">{{nutrient.NutrientID | nutrientName}}</td>
-        <td class="amount">{{nutrient.Value}} {{nutrient.NutrientID | nutrientUnits}}</td>
+        <td class="amount">{{calcNutrientUnits(nutrient.Value) | number:2}} {{nutrient.NutrientID | nutrientUnits}}</td>
       </tr>
     </table>
   </div>
