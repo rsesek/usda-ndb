@@ -54,7 +54,16 @@ angular.module('foodle', [])
           if (id in this._data)
             return this._data[id].Units;
           return '';
-        }
+        },
+        sortFoodNutrients: function(nutrients) {
+          nutrients.sort(function(a, b) {
+            var nA = service._data[a.NutrientID];
+            var nB = service._data[b.NutrientID];
+            if (!nA || !nB)
+              return -1;
+            return nA.SortOrder - nB.SortOrder;
+          });
+        },
       };
       $http.get('/_/nutrients').success(function(data) {
         for (var i = 0; i < data.length; ++i) {

@@ -59,13 +59,14 @@ function SearchController($scope, $http) {
 /**
  * Controller for the food detail page.
  */
-function DetailController($scope, $routeParams, $http) {
+function DetailController($scope, $routeParams, $http, NutrientDefinitions) {
   /** The food object. */
   $scope.food = {};
 
   $http.get('/_/food/' + $routeParams.NDBID)
       .success(function(data) {
         $scope.food = data;
+        NutrientDefinitions.sortFoodNutrients($scope.food.Nutrients);
         $scope.unit = $scope.food.Weights[0];
         $scope.onUnitsChanged();
       })
