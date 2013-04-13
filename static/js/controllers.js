@@ -67,8 +67,16 @@ function DetailController($scope, $routeParams, $http) {
       .success(function(data) {
         $scope.food = data;
         $scope.unit = $scope.food.Weights[0];
+        $scope.onUnitsChanged();
       })
       .error(function(data) {
         $scope.error = data;
       });
+
+  /**
+   * Called when the units selector changes.
+   */
+  $scope.onUnitsChanged = function() {
+    $scope.unitAmount = $scope.unit.Amount;
+  };
 }

@@ -15,7 +15,8 @@
     <div id="refuse" ng-show="food.Refuse">{{food.Refuse}}% of this food is refuse. {{food.RefuseDescription}}.</div>
 
     <div id="units">
-      <select ng-model="unit" ng-options="u as u.Description for u in food.Weights"></select>
+      <input type="number" ng-model="unitAmount"/>
+      <select ng-model="unit" ng-options="u as u.Description for u in food.Weights" ng-change="onUnitsChanged()"></select>
       ({{unit.WeightG}} grams)
     </div>
 
