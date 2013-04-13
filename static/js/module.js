@@ -21,8 +21,17 @@ angular.module('foodle', [])
           .when('/search', {templateUrl: '/partials/search.html'})
           .when('/food/:NDBID', {templateUrl: '/partials/detail.html'});
     })
-    .filter('foodGroupName', function() {
+    .service('FoodGroups', function() {
+      var service = {
+        _data: {},
+        nameFromId: function(id) {
+          return '#' + id + ' (name TBD)';
+        }
+      };
+      return service;
+    })
+    .filter('foodGroupName', function(FoodGroups) {
       return function(input) {
-        return 'Food Group is #' + input;
+        return 'Food Group is ' + FoodGroups.nameFromId(input);
       };
     });
