@@ -48,8 +48,9 @@
           <div class="span6 value">{{food.Manufacturer}}</div>
         </div>
 
-        <div class="row" ng-show="food.Refuse">
-          {{food.Refuse}}% of this food is refuse. {{food.RefuseDescription}}.
+        <div class="row-fluid" ng-show="food.Refuse">
+          <div class="span6 key">Refuse:</div>
+          <div class="span6 value">{{food.Refuse}}% ({{food.RefuseDescription}})</div>
         </div>
       </div>
     </div>
