@@ -52,3 +52,19 @@ header {
 #nutrients .amount {
   text-align: right;
 }
+
+#units {
+  margin-bottom: 5pt;
+}
+
+#units input {
+  width: 5em;
+}
+
+#food-info .key {
+  font-weight: bold;
+}
+
+#food-info .value {
+  text-align: right;
+}
