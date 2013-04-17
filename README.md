@@ -2,9 +2,7 @@
 
 This is a sample app for a tech talk given at the [AngularJS NYC Meetup](http://www.meetup.com/angularjs-nyc) in April 2013.
 
-The repository is tagged with with varous `preso/step-N` tags, which match up with the various step slides in the presentation.
-
-**TODO: Post link to slides.**
+The repository is tagged with with varous `preso/step-N` tags, which match up with the various step [slides in the presentation](http://robert.sesek.com/thoughts/2013/4/angularjs_nyc_meetup_april_2013.html). On that page, I've also included a pre-built server binary, so that you can just clone the repository and run the server without having to install anything.
 
 ## Running the Server
 
