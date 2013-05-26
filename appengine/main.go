@@ -46,6 +46,8 @@ func init() {
 		panic(err)
 	}
 
+	db.RebuildSearchIndex()
+
 	server := frontend.NewServer(db, "./static")
 	http.Handle("/", server)
 }
