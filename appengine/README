@@ -1,0 +1,11 @@
+This is a version of the frontend that runs on Google AppEngine, rather than
+a standalone web server.
+
+Rather than uploading the large ASCII text databases, this server uses a
+GOB-encoded, GZip-compressed version of the database produced by the dbio/dbio
+program.
+
+To run this server on AppEngine, do the following (from the usda-ndb directory):
+
+  $ go run dbio/dbio.go -asciidb=data -output=appengine/asciidb.gob.gz
+  $ /path/to/go_appengine/appcfg.py --oauth2 update appengine/
