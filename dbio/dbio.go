@@ -66,7 +66,7 @@ func main() {
 	}
 	defer f.Close()
 
-	log.Print("Writing compressed stream to %s", *output)
+	log.Printf("Writing compressed stream to %s", *output)
 
 	w := gzip.NewWriter(f)
 	defer w.Close()
