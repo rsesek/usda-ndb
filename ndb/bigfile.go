@@ -106,6 +106,7 @@ func (bf *bigFile) readFile(file string) {
 		}
 
 		// Proceess the chunk.
+		bf.started <- true
 		go bf.processChunk(buf[:n])
 	}
 
@@ -118,8 +119,6 @@ func (bf *bigFile) readFile(file string) {
 // the processor. Any errors from the processor are sent over the error channel,
 // or nil is sent when processing is done.
 func (bf *bigFile) processChunk(buf []byte) {
-	bf.started <- true
-
 	// Convert the bytes to runes, which is necessary to ensure that any ASCII
 	// characters are decoded correctly to UTF8.
 	chunk := make([]rune, len(buf))
