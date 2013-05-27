@@ -158,21 +158,7 @@ func (db *ASCIIDB) readFoods() error {
 			Refuse:            refuse,
 		}
 		db.Foods[id] = food
-
-		// Join all the descriptions together to create search terms.
-		search := strings.ToLower(fmt.Sprintf("%s %s %s %s",
-			food.LongDescription, food.ShortDescription, food.CommonNames, food.Manufacturer))
-		var last int
-		for i := 0; i < len(search); i++ {
-			c := search[i]
-			if c == ',' || c == ' ' || c == '&' || c == '/' || c == '!' || c == '-' || c == '.' {
-				part := search[last:i]
-				if len(part) > 2 {
-					db.searchTree.Insert(bst.Pair{part, id})
-				}
-				last = i + 1
-			}
-		}
+		db.addTermsForFood(food)
 
 		return nil
 	})
