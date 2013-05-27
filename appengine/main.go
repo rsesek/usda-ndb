@@ -48,6 +48,6 @@ func init() {
 
 	db.RebuildSearchIndex()
 
-	server := frontend.NewServer(db, "./static_appserver")
+	server := frontend.NewServer(db, "__served_by_appengine__")
 	http.Handle("/", server)
 }
